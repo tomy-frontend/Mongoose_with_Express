@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>商品の編集</title>
+  </head>
+  <body>
+    <h1>商品の編集</h1>
+    <form action="/products/<%= product.id %>?_method=PUT" method="post">
+      <label for="name">商品名</label>
+      <input
+        id="name"
+        type="text"
+        name="name"
+        placeholder="商品名"
+        value="<%= product.name  %>"
+      />
+
+      <label for="price">価格</label>
+      <input
+        id="price"
+        type="number"
+        name="price"
+        placeholder="価格"
+        value="<%= product.price %>"
+      />
+
+      <label for="category">カテゴリー</label>
+      <select name="category" id="category">
+        <option value="果物">果物</option>
+        <option value="野菜">野菜</option>
+        <option value="乳製品">乳製品</option>
+      </select>
+      <button>登録</button>
+    </form>
+    <a href="/products/<%= product._id %>">キャンセル</a>
+  </body>
+</html>

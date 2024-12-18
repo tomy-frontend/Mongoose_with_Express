@@ -6,6 +6,8 @@ const Product = require("./models/product"); // 作成したモデルをrequired
 
 // 注意:MongoDBのコマンドが実行されている必要がある
 const mongoose = require("mongoose"); // mongooseの立ち上げ
+const methodOverride = require("method-override");
+
 mongoose
   .connect("mongodb://localhost:27017/farmStand", {
     useNewUrlParser: true,
@@ -22,6 +24,7 @@ mongoose
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 // REST fulなルーティング設定
 // productsページのルーティング、非同期で取得して、得た結果をもとに処理をするとか、手に入れたものをレスポンスで返すなどの処理にする
@@ -48,6 +51,23 @@ app.get("/products/:id", async (req, res) => {
   const { id } = req.params;
   const product = await Product.findById(id); // 手に入れたidをもとに、findByIdを使用してMongoDBからproductを取ってきている
   res.render("products/show", { product });
+});
+
+// 編集ページのルーティング
+app.get("/products/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findById(id);
+  res.render("products/edit", { product });
+});
+
+// 編集処理ルーティング
+app.put("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findByIdAndUpdate(id, req.body, {
+    runValidators: true, // バリデーションチェック
+    new: true, // 更新と同時に新しいデータを受け取りたい場合true!
+  });
+  res.redirect(`/products/${product.id}`); // 商品詳細ページにリダイレクト
 });
 
 // サーバー立ち上げ
