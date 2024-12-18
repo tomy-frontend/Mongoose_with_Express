@@ -21,12 +21,26 @@ mongoose
 // ejsのセットアップ
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
 
 // REST fulなルーティング設定
 // productsページのルーティング、非同期で取得して、得た結果をもとに処理をするとか、手に入れたものをレスポンスで返すなどの処理にする
 app.get("/products", async (req, res) => {
   const products = await Product.find({}); // データを全て取得する
   res.render("products/index", { products }); // products/index.ejsを表示
+});
+
+// 商品追加ページのルーティング
+app.get("/products/new", (req, res) => {
+  res.render("products/new");
+});
+
+// 商品新規作成のルーティング
+app.post("/products", async (req, res) => {
+  const newProduct = new Product(req.body);
+  await newProduct.save();
+  console.log(newProduct);
+  res.redirect(`/products/${newProduct.id}`); // 詳細ページにリダイレクトする。postのレスポンスでフォームの再送信を防ぐため
 });
 
 // 商品詳細ページのルーティング
