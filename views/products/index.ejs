@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>商品一覧</title>
+  </head>
+  <body>
+    <h1>商品一覧ページ</h1>
+    <ul>
+      <% for(let product of products) { %>
+      <li><a href="/products/<%= product._id  %>"><%= product.name %></a></li>
+      <% } %>
+    </ul>
+  </body>
+</html>
