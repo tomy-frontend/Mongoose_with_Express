@@ -9,7 +9,12 @@
     <h1><%= product.name %></h1>
     <ul>
       <li>価格: <%= product.price %>円</li>
-      <li>カテゴリ: <%= product.category %></li>
+      <li>
+        カテゴリ:
+        <a href="/products?category=<%= product.category %>"
+          ><%= product.category %></a
+        >
+      </li>
     </ul>
     <a href="/products">商品一覧へ戻る</a>
     <a href="/products/<%= product.id %>/edit">編集</a>

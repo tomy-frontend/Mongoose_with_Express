@@ -14,10 +14,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("MongoDB接続完了！");
+    console.log("MongoDB接続完了!");
   })
   .catch((error) => {
-    console.log("MongoDB接続エラー！", error);
+    console.log("MongoDB接続エラー!", error);
   });
 
 // ejsのセットアップ
@@ -26,15 +26,21 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+// optionの中身
+const categories = ["果物", "野菜", "乳製品"];
+
 // REST fulなルーティング設定
 // productsページのルーティング、非同期で取得して、得た結果をもとに処理をするとか、手に入れたものをレスポンスで返すなどの処理にする
 app.get("/products", async (req, res) => {
-  const products = await Product.find({}); // データを全て取得する
-  res.render("products/index", { products }); // products/index.ejsを表示
+  const { category } = req.query;
+  if (category) {
+    const products = await Product.find({ category });
+    res.render("products/index", { products, category });
+  } else {
+    const products = await Product.find({});
+    res.render("products/index", { products, category: "全" });
+  }
 });
-
-// optionの中身
-const categories = ["果物", "野菜", "乳製品"];
 
 // 商品追加ページのルーティング
 app.get("/products/new", (req, res) => {
