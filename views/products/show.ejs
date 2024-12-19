@@ -13,5 +13,8 @@
     </ul>
     <a href="/products">商品一覧へ戻る</a>
     <a href="/products/<%= product.id %>/edit">編集</a>
+    <form action="/products/<%= product.id  %>?_method=DELETE" method="post">
+      <button>削除</button>
+    </form>
   </body>
 </html>

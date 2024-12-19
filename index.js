@@ -33,9 +33,12 @@ app.get("/products", async (req, res) => {
   res.render("products/index", { products }); // products/index.ejsを表示
 });
 
+// optionの中身
+const categories = ["果物", "野菜", "乳製品"];
+
 // 商品追加ページのルーティング
 app.get("/products/new", (req, res) => {
-  res.render("products/new");
+  res.render("products/new", { categories });
 });
 
 // 商品新規作成のルーティング
@@ -57,7 +60,7 @@ app.get("/products/:id", async (req, res) => {
 app.get("/products/:id/edit", async (req, res) => {
   const { id } = req.params;
   const product = await Product.findById(id);
-  res.render("products/edit", { product });
+  res.render("products/edit", { product, categories });
 });
 
 // 編集処理ルーティング
@@ -68,6 +71,13 @@ app.put("/products/:id", async (req, res) => {
     new: true, // 更新と同時に新しいデータを受け取りたい場合true!
   });
   res.redirect(`/products/${product.id}`); // 商品詳細ページにリダイレクト
+});
+
+// 削除処理ルーティング
+app.delete("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  const deletedProduct = await Product.findByIdAndDelete(id);
+  res.redirect("/products");
 });
 
 // サーバー立ち上げ
