@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -12,6 +13,11 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     enum: ["果物", "野菜", "乳製品"],
+  },
+  // farmへの参照
+  farm: {
+    type: Schema.Types.ObjectId,
+    ref: "Farm",
   },
 });
 

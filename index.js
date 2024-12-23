@@ -87,6 +87,6 @@ app.delete("/products/:id", async (req, res) => {
 });
 
 // サーバー立ち上げ
-app.listen(3000, () => {
-  console.log("ポート3000でリクエスト受付中...");
+app.listen(3002, () => {
+  console.log("ポート3002でリクエスト受付中...");
 });
