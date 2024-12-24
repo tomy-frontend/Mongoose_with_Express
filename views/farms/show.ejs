@@ -19,5 +19,8 @@
     </ul>
     <a href="/farms/<%= farm._id %>/products/new">商品追加</a>
     <a href="/farms">農場一覧へ戻る</a>
+    <form action="/farms/<%= farm._id %>?_method=DELETE" method="post">
+      <button>農場を削除する</button>
+    </form>
   </body>
 </html>

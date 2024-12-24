@@ -72,6 +72,12 @@ app.post("/farms/:id/products", async (req, res) => {
   res.redirect(`/farms/${farm.id}`);
 });
 
+// 削除ルーティング
+app.delete("/farms/:id", async (req, res) => {
+  await Farm.findByIdAndDelete(req.params.id);
+  res.redirect("/farms");
+});
+
 // product関連
 // optionの中身
 const categories = ["果物", "野菜", "乳製品"];
