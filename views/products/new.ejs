@@ -6,8 +6,9 @@
     <title>商品の新規登録</title>
   </head>
   <body>
-    <h1>商品の新規登録</h1>
-    <form action="/farms/<%= id %>/products" method="post">
+    <h1><%= farm.name %></h1>
+    <h2>商品の新規登録</h2>
+    <form action="/farms/<%= farm._id %>/products" method="post">
       <label for="name">商品名</label>
       <input id="name" type="text" name="name" placeholder="商品名" />
 
@@ -22,5 +23,6 @@
       </select>
       <button>登録</button>
     </form>
+    <a href="/farms/<%= farm._id %>">農場へ戻る</a>
   </body>
 </html>

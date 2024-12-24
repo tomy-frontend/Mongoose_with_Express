@@ -48,14 +48,15 @@ app.post("/farms", async (req, res) => {
 
 // farmsの個別ページを追加するルーティング
 app.get("/farms/:id", async (req, res) => {
-  const farm = await Farm.findById(req.params.id);
+  const farm = await Farm.findById(req.params.id).populate("products");
   res.render("farms/show", { farm });
 });
 
 // 各farmに商品を追加するページパスのルーティング
-app.get("/farms/:id/products/new", (req, res) => {
+app.get("/farms/:id/products/new", async (req, res) => {
   const { id } = req.params;
-  res.render("products/new", { categories, id });
+  const farm = await Farm.findById(id);
+  res.render("products/new", { categories, farm });
 });
 
 // farmに商品を追加するルーティング
@@ -104,7 +105,7 @@ app.post("/products", async (req, res) => {
 // 商品詳細ページのルーティング
 app.get("/products/:id", async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findById(id); // 手に入れたidをもとに、findByIdを使用してMongoDBからproductを取ってきている
+  const product = await Product.findById(id).populate("farm", "name"); // 手に入れたidをもとに、findByIdを使用してMongoDBからproductを取ってきている
   res.render("products/show", { product });
 });
 

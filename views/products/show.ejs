@@ -15,6 +15,10 @@
           ><%= product.category %></a
         >
       </li>
+      <li>
+        農場:
+        <a href="/farms/<%= product.farm.id %>"><%= product.farm.name %></a>
+      </li>
     </ul>
     <a href="/products">商品一覧へ戻る</a>
     <a href="/products/<%= product.id %>/edit">編集</a>
