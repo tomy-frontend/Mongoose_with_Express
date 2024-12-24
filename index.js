@@ -45,6 +45,11 @@ app.post("/farms", async (req, res) => {
   res.redirect("/farms");
 });
 
+app.get("/farms/:id", async (req, res) => {
+  const farm = await Farm.findById(req.params.id);
+  res.render("farms/show", { farm });
+});
+
 // product関連
 // optionの中身
 const categories = ["果物", "野菜", "乳製品"];

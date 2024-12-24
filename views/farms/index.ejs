@@ -9,7 +9,7 @@
     <h1>農場一覧ページ</h1>
     <ul>
       <% for(let farm of farms) { %>
-      <li><%= farm.name %></li>
+      <li><a href="/farms/<%= farm.id %>"><%= farm.name %></a></li>
       <% } %>
     </ul>
   </body>
