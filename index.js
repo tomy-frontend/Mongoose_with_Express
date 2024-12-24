@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 
 const Product = require("./models/product"); // 作成したモデルをrequiredする
+const Farm = require("./models/farm"); // 作成したモデルをrequiredする
 
 // 注意:MongoDBのコマンドが実行されている必要がある
 const mongoose = require("mongoose"); // mongooseの立ち上げ
@@ -26,6 +27,25 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+// farm関連
+// farmの新規登録ページパスへのルーティング
+app.get("/farms", async (req, res) => {
+  const farms = await Farm.find({});
+  res.render("farms/index", { farms });
+});
+
+app.get("/farms/new", (req, res) => {
+  res.render("farms/new");
+});
+
+// farmのform送信後のルーティング
+app.post("/farms", async (req, res) => {
+  const farm = new Farm(req.body);
+  await farm.save();
+  res.redirect("/farms");
+});
+
+// product関連
 // optionの中身
 const categories = ["果物", "野菜", "乳製品"];
 
