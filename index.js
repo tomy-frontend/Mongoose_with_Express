@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const PORT = process.env.PORT || 3003;
 
 const Product = require("./models/product"); // 作成したモデルをrequiredする
 const Farm = require("./models/farm"); // 作成したモデルをrequiredする
@@ -45,9 +46,29 @@ app.post("/farms", async (req, res) => {
   res.redirect("/farms");
 });
 
+// farmsの個別ページを追加するルーティング
 app.get("/farms/:id", async (req, res) => {
   const farm = await Farm.findById(req.params.id);
   res.render("farms/show", { farm });
+});
+
+// 各farmに商品を追加するページパスのルーティング
+app.get("/farms/:id/products/new", (req, res) => {
+  const { id } = req.params;
+  res.render("products/new", { categories, id });
+});
+
+// farmに商品を追加するルーティング
+app.post("/farms/:id/products", async (req, res) => {
+  const { id } = req.params; // リクエストからparamsの中のidを取得
+  const farm = await Farm.findById(id); // Farmデータベースの中からidで探してfarm変数に格納する
+  const { name, price, category } = req.body; //リクエストボディからname,price,categoryを取得
+  const product = new Product({ name, price, category }); //取得したname,price,categoryを使用して、Productインスタンスを作成
+  farm.products.push(product); // 作成した新規Productをfarmのproductsの配列にpush()
+  product.farm = farm; // productの方にも、farmプロパティの中にfarmを代入
+  await farm.save();
+  await product.save();
+  res.redirect(`/farms/${farm.id}`);
 });
 
 // product関連
@@ -112,6 +133,15 @@ app.delete("/products/:id", async (req, res) => {
 });
 
 // サーバー立ち上げ
-app.listen(3002, () => {
-  console.log("ポート3002でリクエスト受付中...");
-});
+app
+  .listen(PORT, () => {
+    console.log(`ポート${PORT}でリクエスト受付中...`);
+  })
+  .on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      console.log(`ポート${PORT}は既に使用されています。`);
+      process.exit(1);
+    } else {
+      console.error("サーバー起動エラー:", err);
+    }
+  });
