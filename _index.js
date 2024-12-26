@@ -2,26 +2,16 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const PORT = process.env.PORT || 3000;
+
 const Product = require("./models/product"); // 作成したモデルをrequiredする
 const Farm = require("./models/farm"); // 作成したモデルをrequiredする
-const session = require("express-session");
-const flash = require("connect-flash");
 
 // 注意:MongoDBのコマンドが実行されている必要がある
 const mongoose = require("mongoose"); // mongooseの立ち上げ
 const methodOverride = require("method-override");
 
-const sessionOptions = {
-  secret: "mysecret",
-  resave: false,
-  saveUninitialized: false,
-};
-
-app.use(session(sessionOptions));
-app.use(flash()); // 全てのリクエストオブジェクトでflashが使用できるようになる
-
 mongoose
-  .connect("mongodb://localhost:27017/flashDemo", {
+  .connect("mongodb://localhost:27017/farmStand", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -38,12 +28,6 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-// localsのmessagesにflashのsuccessを保存してどこでも呼び出せるようにするミドルウェア
-app.use((req, res, next) => {
-  res.locals.messages = req.flash("success");
-  next();
-});
-
 // farm関連
 // farmの新規登録ページパスへのルーティング
 app.get("/farms", async (req, res) => {
@@ -59,7 +43,6 @@ app.get("/farms/new", (req, res) => {
 app.post("/farms", async (req, res) => {
   const farm = new Farm(req.body);
   await farm.save();
-  req.flash("success", "登録に成功しました！"); // キーと表示したいテキスト
   res.redirect("/farms");
 });
 
